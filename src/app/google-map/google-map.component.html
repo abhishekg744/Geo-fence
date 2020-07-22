@@ -1,0 +1,30 @@
+<div fxLayout="column" fxFlexFill [ngClass]="{'dialog-active': showDialog}">
+    <div>
+        <app-geofence-management [GeoFenceNames]="GeoFenceNames" (deleteGeoFence)="deleteGeoFence($event)"
+            (loadGeoFenceOnMap)="loadGeoFenceOnMap($event)" (triggerDrawing)="triggerDrawing($event)"
+            (addGeoFence)="closeDialog($event)"></app-geofence-management>
+    </div>
+    <ngui-map zoom="19" [center]="mapCenter" mapTypeId="satellite" (mapReady$)="onMapReady($event)">
+        <polygon *ngFor="let polygon of coords" [editable]="true" [paths]="polygon.polygonCoords"
+            [strokeColor]="'#FFC107'" [strokeOpacity]="0.8" [strokeWeight]="2" [fillColor]="'#FFC107'"
+            [fillOpacity]="0.35"></polygon>
+
+        <drawing-manager [ngClass]="{'disable-map-drawing': !enableDrawing}" [drawingControl]="true"
+            [drawingControlOptions]="drawOptions" [polygonOptions]="polygonOptions"></drawing-manager>
+
+        <marker [position]="position"></marker>
+    </ngui-map>
+</div>
+<div class="custm-dialog" fxLayout="column" fxFlexFill *ngIf="showDialog" fxLayoutAlign="center">
+    <app-add-geofence fxFlex="50" fxFlexAlign="center" [data]="dialogData" (closeDialog)="closeDialog($event)">
+    </app-add-geofence>
+</div>
+<div class="progress-loader" *ngIf="loading">
+    <mat-progress-spinner [mode]="'indeterminate'">
+    </mat-progress-spinner>
+</div>
+<div class="run-icon">
+    <span class="material-icons" (click)="listenToLocation()">
+        directions_run
+        </span>
+</div>

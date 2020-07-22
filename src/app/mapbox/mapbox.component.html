@@ -1,0 +1,16 @@
+<div fxLayout="column" fxFlexFill >
+    <div>
+        <app-geofence-management [GeoFenceNames]="GeoFenceNames" (loadGeoFenceOnMap)="loadGeoFenceOnMap($event)">
+        </app-geofence-management>
+    </div>
+    <div class="map" id="map" class="match-parent"></div>
+</div>
+<div class="custm-dialog" fxLayout="column" fxFlexFill *ngIf="showDialog" fxLayoutAlign="center">
+    <app-add-geofence fxFlex="50" fxFlexAlign="center" [data]="dialogData" (closeDialog)="closeDialog($event)">
+    </app-add-geofence>
+</div>
+<div class="run-icon">
+    <span class="material-icons" (click)="listenToLocation()">
+        directions_run
+        </span>
+</div>

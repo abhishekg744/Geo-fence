@@ -1,0 +1,36 @@
+ngui-map {
+    height: 100%;
+}
+
+.dialog-active {
+    opacity: 0.5;
+}
+
+.disable-map-drawing {
+    pointer-events: none;
+  }
+
+  .progress-loader{
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    z-index: 999;
+    background-color: rgba(0,0,0,0.3);
+   }
+ 
+   .mat-progress-spinner circle, .mat-spinner circle {
+    stroke: #665b7d;
+   }
+
+   .run-icon{
+    position: fixed;
+    right: 16px;
+    top: 115px;
+    color: white;
+    transform: rotateY(180deg);
+   }

@@ -1,0 +1,84 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: beige;}
+// .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon{
+//     background-image: url('../img/svg/mapboxgl-ctrl-zoom-out.svg')
+//   }
+//   .mapboxgl-ctrl button.mapboxgl-ctrl-compass .mapboxgl-ctrl-icon{
+//     background-image: url('../img/svg/mapboxgl-ctrl-compass.svg')
+//   }
+//   .mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon{
+//     background-image: url('../img/svg/mapboxgl-ctrl-zoom-in.svg')
+//   }
+
+::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: white; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: cadetblue; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: cadetblue; 
+  }
+  
+  .mat-expansion-indicator::after {
+    color: white !important;
+  }
+
+  mat-expansion-panel, mat-toolbar {
+    background-color:#668eb3 !important;
+  }
+
+  mat-panel-title, mat-panel-description {
+      color: white !important;
+  }
+
+  .mat-list-item-content {
+    cursor: pointer;
+  }
+
+  .add-cords mat-dialog-container {
+    padding: 0px !important;
+  }
+
+  .md-select-menu-container {
+    z-index: 99999 !important;
+  }
+
+  .mat-horizontal-stepper-header-container {
+    width: 370px;
+  }
+
+  .error-snackbar {
+    background-color: red;
+    color: white;
+    display: flex !important;
+    place-content: center;
+  }
+
+  .success-snackbar {
+    background-color: green;
+    color: white;
+    display: flex !important;
+    place-content: center;
+  }
+
+  
+.custm-dialog {
+  position: fixed;
+  z-index: 100;
+  height: 100%;
+  width: 100%;
+  top:0;
+}

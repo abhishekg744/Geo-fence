@@ -1,0 +1,106 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Geofence Management
+        </mat-panel-title>
+        <mat-panel-description>
+            View/Add Geofence
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-horizontal-stepper #stepper>
+        <mat-step [completed]="false">
+            <ng-template matStepLabel>Geofence group</ng-template>
+            <div fxLayout="column" class="list-container"  fxFlexOffset="10px">
+                <div fxLayout="row wrap" fxLayoutGap="5px">
+                    <mat-form-field appearance="fill" class="select-field">
+                        <mat-label>Select Geofence Group</mat-label>
+                        <mat-select (selectionChange)="selectedFenceChanged($event)">
+                            <mat-option *ngFor="let fence of GeoFenceNames" [value]="fence">
+                                {{fence}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div fxLayout="column" *ngIf="selectedFence" fxFlexAlign="start" fxLayoutGap="5px" fxFlexFill>
+                    <div *ngFor="let polygon of polygons; let tableindex = index;">
+                        <div fxLayout="column">
+                            <div fxLayout="row">
+                                <strong>Latitude Longitude Values</strong>
+                                <span class="material-icons edit-icon" fxFlexAlign="center" *ngIf="!polygon.edit"
+                                    (click)="polygon.edit = !polygon.edit">
+                                    create
+                                </span>
+                                <span class="material-icons sync-icon" fxFlexAlign="center" *ngIf="polygon.edit"
+                                    (click)="update(polygon)">
+                                    check
+                                </span>
+                                <span class="material-icons delete-icon" fxFlexAlign="center"
+                                    (click)='delete(tableindex,polygon)'>
+                                    delete
+                                </span>
+                                <span class="material-icons sync-icon" fxFlexAlign="center"
+                                    (click)="loadOnMap(polygon, tableindex)" *ngIf="!polygon.edit">
+                                    sync
+                                </span>
+                            </div>
+                            <span *ngIf="!polygon.edit" class='coord-values'>{{polygon.coords}}</span>
+                            <span *ngIf="polygon.edit" class='coord-values'>
+                                <mat-form-field appearance="fill" fxFlexFill>
+                                    <textarea matInput fxFlexAlign="center" (change)="isLatLngValid(polygon.coords)" [(ngModel)]="polygon.coords"></textarea>
+                                    <mat-hint fxFlexOffset="3px">Formate : lat1,lng1;lat2,lng2</mat-hint>
+                                </mat-form-field>
+                                <mat-error *ngIf="inputError">
+                                    invalid lat lng values
+                                </mat-error>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-step>
+
+        <mat-step [completed]="false">
+            <ng-template matStepLabel>Create Geofence</ng-template>
+            <div fxLayout="row">
+                <mat-button-toggle-group [value]="stepperValue" (change)="stepperChanged($event)" name="fontStyle" aria-label="Font Style">
+                    <mat-button-toggle value="1">Enter coordinates manually</mat-button-toggle>
+                    <mat-button-toggle value="2">Draw coordinates on map</mat-button-toggle>
+                  </mat-button-toggle-group>
+            </div>
+           
+            <div fxLayout="column" *ngIf="!isDrawOnMap" >
+                <div fxLayout="row" fxFlexOffset="10px">
+                    <div fxLayout="row wrap" fxLayoutGap="5px">
+                        <mat-form-field appearance="fill" class="select-field">
+                            <mat-label>Select Geofence</mat-label>
+                            <mat-select (selectionChange)="fenceChangedForAdd($event)">
+                                <mat-option *ngFor="let fence of GeoFenceNames" [value]="fence">
+                                    {{fence}}</mat-option>
+                                    <mat-option  value="Add">
+                                        Add new fence</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="column">
+                    <mat-form-field appearance="fill" *ngIf="showAddInput" class="select-field">
+                        <input matInput placeholder="Add new fence" [(ngModel)]="newRecord.name">
+                    </mat-form-field>
+                    <strong>Latitude Longitude Values</strong>
+                    <span class='coord-values'>
+                        <mat-form-field appearance="fill" fxFlexFill>
+                            <textarea matInput fxFlexAlign="center" (change)="isLatLngValid(newRecord.coords)" [(ngModel)]="newRecord.coords"></textarea>
+                            <mat-hint fxFlexOffset="3px">Formate : lat1,lng1;lat2,lng2</mat-hint>
+                        </mat-form-field>
+                        <mat-error *ngIf="inputError">
+                            invalid lat lng values
+                        </mat-error>
+                    </span>
+                </div>
+                <button fxFlexOffset="5px" [disabled]="!((newRecord.name.length !== 0) && (newRecord.coords.length !== 0))"
+                    mat-raised-button color="primary" (click)="addNewFence()">
+                    ADD</button>
+            </div>
+        </mat-step>
+    </mat-horizontal-stepper>
+
+</mat-expansion-panel>
