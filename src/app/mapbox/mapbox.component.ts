@@ -32,18 +32,29 @@ export class MapboxComponent implements OnInit {
       this.polygons = data;
     });
 
+
     this.mapBoxService.newCoorinates.subscribe(data => {
       this.confirmCoordinates(data);
-    });    
-    this.loadMap();
+    });  
+
+    this.mapService.getAllGeoFenceNames().subscribe((res: any) => {
+      this.GeoFenceNames = res;
+    }, err => {
+      console.log("Error Response", err);
+    }); 
+    let currentLocation = this.mapService.getCurrentLocation().then((data : any) =>{
+      let mapCenter = [data.longitude , data.latitude];
+      console.log("CurrentLocation",data);
+      this.loadMap(mapCenter);
+    });
     this.mapService.setCurrentGeofenceList(
       [{ 'name': 'Sasken Building', 'placeName': 'sasken', 'coords': "77.63858714934412,12.954675760848616;77.63921966283107,12.954550194885982;77.63900882500275,12.953768259968001;77.63839973794074,12.953899533885362;77.63858714934412,12.954675760848616;" }]
     );
 
   }
 
-  loadMap(coords = 0) {
-    this.map = this.mapBoxService.getMapObject(MapConfig.MapCenter[0],MapConfig.MapCenter[1]);
+  loadMap(coords) {
+    this.map = this.mapBoxService.getMapObject(coords[0],coords[1]);
     this.mapBoxService.setZoom(16);
     this.mapBoxService.addDrawingManager();
   }
@@ -70,7 +81,7 @@ export class MapboxComponent implements OnInit {
     console.log('v  - ', latlngValues);
     this.mapPolygons.push(mapPolygonsRow);
     console.log('M  - ', this.mapPolygons);
-    this.mapBoxService.addPolygon(polygon.name.toString(), latlngValues);
+    this.mapBoxService.addPolygon(polygon.placeName.toString(), latlngValues);
     this.mapBoxService.setZoom(16);
   }
 

@@ -14,6 +14,7 @@ export class MapService {
 
   public currentGeofencePolygonList = new BehaviorSubject([]);
   private currentGeofence = '';
+  coordsPattern =  /^[0-9.,;]+$/; 
 
   getCurrentLocation() {
     return new Promise(resolve => {
@@ -40,6 +41,9 @@ export class MapService {
   }
 
   isLatLngValid(coords) {
+    if(!this.coordsPattern.test(coords)) {
+      return true;
+    }
     if (coords != undefined && coords.length > 0) {
       let length = coords.length;
       if (coords[length - 1] == ";") {
@@ -51,6 +55,8 @@ export class MapService {
       } else {
         return true;
       }
+    } else {
+      return false;
     }
   }
 
@@ -64,6 +70,7 @@ export class MapService {
 
   
   addGeofenceData(geofenceData) {
+    geofenceData.mapType = sessionStorage.component;
     return this.http.post(URL.addGeofenceData, geofenceData);
   }
 

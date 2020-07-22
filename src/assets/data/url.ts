@@ -4,9 +4,10 @@ let base = environment.serverUrl;
 let componentIdentifier = sessionStorage.component;
 
 export let URL =  {
-    getGeofenceByName : base + componentIdentifier + 'geoCords/',
-    getAllGeoFenceNames: base + componentIdentifier + 'geoCords/name',
-    addGeofenceData: base + componentIdentifier + 'addGeoCord',
-    updateGeofenceData: base + componentIdentifier + 'geoCords/',
-    deleteGeofenceData: base + componentIdentifier + 'geoCords/'
+    getGeofenceByName : base + 'maptype/'+componentIdentifier+'/name/',
+    getAllGeoFenceNames: base + 'names/maptype/'+ componentIdentifier,
+    addGeofenceData: base,
+    updateGeofenceData: base + 'id/',
+    deleteGeofenceData: base + 'id/',
 };
+

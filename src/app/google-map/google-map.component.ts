@@ -25,7 +25,7 @@ export class GoogleMapComponent implements OnInit {
   // once backend is in place this will anyhow gets replaced
   GeoFenceNames = ['fence1', 'fence2'];
   
-  mapCenter = MapConfig.Map_Center;
+  mapCenter ;
   drawOptions = {
     position: 2,
     drawingModes: MapConfig.Drawing_Manager.Modes,
@@ -45,6 +45,10 @@ export class GoogleMapComponent implements OnInit {
   intervalObject  ;
 
   ngOnInit(): void {
+  let currentLocation = this.mapService.getCurrentLocation().then((data : any) =>{
+    this.mapCenter = data.latitude.toString()+','+ data.longitude.toString();
+    console.log("CurrentLocation",data)
+  });
     sessionStorage.component = CONSTANTS.GOOGLEMAP_COMPONENT;
     // listen to loader to enable/disable
     this.loaderService.loaderState.subscribe((res: any) => {

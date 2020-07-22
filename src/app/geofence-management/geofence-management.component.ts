@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NotificationService } from '../services/notification.service';
 import { LoaderService } from '../services/loader.service';
 import { MapService } from '../services/map.service';
+import { CONSTANTS } from '../contants';
 
 @Component({
   selector: 'app-geofence-management',
@@ -25,8 +26,10 @@ export class GeofenceManagement implements OnInit {
   stepperValue = '1';
   showAddInput = false;
   inputError = false;
+  isGoogleMap = false;
 
   ngOnInit(): void {
+    this.isGoogleMap = (sessionStorage.component == CONSTANTS.GOOGLEMAP_COMPONENT) ? true : false;
     this.mapService.currentGeofencePolygonList.subscribe(data => {
       this.polygons = data;
     });
@@ -77,6 +80,7 @@ export class GeofenceManagement implements OnInit {
     polygonData.name = tableindex;
     this.loadGeoFenceOnMap.emit(polygonData);
   }
+
 
   addNewFence() {
     this.inputError= this.mapService.isLatLngValid(this.newRecord.coords);

@@ -3,7 +3,7 @@ export let MapConfig = {
     DrawingManager: {
         Controls: {
             polygon: true,
-            trash: true,
+            // trash: true,
 
         }
     },
