@@ -91,7 +91,9 @@
                     <span class='coord-values'>
                         <mat-form-field appearance="fill" fxFlexFill>
                             <textarea matInput fxFlexAlign="center" (change)="isLatLngValid(newRecord.coords)" [(ngModel)]="newRecord.coords"></textarea>
-                            <mat-hint fxFlexOffset="3px">Formate : lat1,lng1;lat2,lng2</mat-hint>
+                            <mat-hint fxFlexOffset="3px">
+                                {{ isGoogleMap ? 'Format : lat1,lng1;lat2,lng2' : 'Format : lng1,lat1;lng2,lat2' }}
+                            </mat-hint>
                         </mat-form-field>
                         <mat-error *ngIf="inputError">
                             invalid lat lng values

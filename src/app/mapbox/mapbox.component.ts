@@ -73,6 +73,7 @@ export class MapboxComponent implements OnInit {
       polygonCoords = polygonCoords.substring(0, polygonCoords.length - 1);
     }
     let latlngValues = polygonCoords.split(';');
+    this.mapBoxService.setCenter(parseFloat(latlngValues[0].split(',')[0]), parseFloat(latlngValues[0].split(',')[1]) )
     latlngValues = latlngValues.map((data) => {
       let row = data.split(',');
       mapPolygonsRow.polygonCoords.push({lat:parseFloat(row[1]), lng: parseFloat(row[0])});
