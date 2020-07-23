@@ -35,16 +35,16 @@ export class MapboxComponent implements OnInit {
 
     this.mapBoxService.newCoorinates.subscribe(data => {
       this.confirmCoordinates(data);
-    });  
+    });
 
     this.mapService.getAllGeoFenceNames().subscribe((res: any) => {
       this.GeoFenceNames = res;
     }, err => {
       console.log("Error Response", err);
-    }); 
-    let currentLocation = this.mapService.getCurrentLocation().then((data : any) =>{
-      let mapCenter = [data.longitude , data.latitude];
-      console.log("CurrentLocation",data);
+    });
+    let currentLocation = this.mapService.getCurrentLocation().then((data: any) => {
+      let mapCenter = [data.longitude, data.latitude];
+      console.log("CurrentLocation", data);
       this.loadMap(mapCenter);
     });
     this.mapService.setCurrentGeofenceList(
@@ -54,9 +54,30 @@ export class MapboxComponent implements OnInit {
   }
 
   loadMap(coords) {
-    this.map = this.mapBoxService.getMapObject(coords[0],coords[1]);
+    this.map = this.mapBoxService.getMapObject(coords[0], coords[1]);
     this.mapBoxService.setZoom(16);
+    this.mapBoxService.addGeoCoder();
     this.mapBoxService.addDrawingManager();
+    this.addCustomRunIcon();
+  }
+
+  addCustomRunIcon() {
+    var  control;
+    control = {
+      onAdd:() => {
+        let container = document.createElement('div');
+        container.classList.add('mapboxgl-ctrl-group', 'mapboxgl-ctrl')
+        var span = document.createElement('button');
+        span.classList.add('material-icons', 'run-icon');
+        span.textContent = 'directions_run'
+        span.addEventListener('click', () => {
+            this.listenToLocation();
+        });     
+        container.append(span);
+        return container;
+      }
+    };
+    this.map.addControl(control);
   }
 
   loadGeoFenceOnMap(data) {
@@ -67,16 +88,16 @@ export class MapboxComponent implements OnInit {
 
   convertToMapPolygons(polygon) {
     let polygonCoords = polygon.coords;
-    let  mapPolygonsRow = polygon;
+    let mapPolygonsRow = polygon;
     mapPolygonsRow.polygonCoords = [];
     if (polygonCoords[polygonCoords.length - 1] == ';') {
       polygonCoords = polygonCoords.substring(0, polygonCoords.length - 1);
     }
     let latlngValues = polygonCoords.split(';');
-    this.mapBoxService.setCenter(parseFloat(latlngValues[0].split(',')[0]), parseFloat(latlngValues[0].split(',')[1]) )
+    this.mapBoxService.setCenter(parseFloat(latlngValues[0].split(',')[0]), parseFloat(latlngValues[0].split(',')[1]))
     latlngValues = latlngValues.map((data) => {
       let row = data.split(',');
-      mapPolygonsRow.polygonCoords.push({lat:parseFloat(row[1]), lng: parseFloat(row[0])});
+      mapPolygonsRow.polygonCoords.push({ lat: parseFloat(row[1]), lng: parseFloat(row[0]) });
       return [parseFloat(row[0]), parseFloat(row[1])];
     });
     console.log('v  - ', latlngValues);
@@ -109,34 +130,34 @@ export class MapboxComponent implements OnInit {
   // change position of marker every second
   listenToLocation() {
     this.intervalObject = setInterval(() =>
-       this.setPosition(), 1000
-     );
-   }
-   
+      this.setPosition(), 1000
+    );
+  }
+
   // live marker positioning
   setPosition() {
     if (this.positionIndex <= this.positions.length - 1) {
       let position = this.positions[this.positionIndex];
-      if(!this.isMarkerAdded) {
+      if (!this.isMarkerAdded) {
         this.mapBoxService.setMarker(position[1], position[0]);
         this.isMarkerAdded = true;
       } else {
         this.mapBoxService.updateMarkerPosition(position[1], position[0]);
       }
-      this.positionIndex ++;
+      this.positionIndex++;
       let currentPosition = { 'lat': position[0], 'lng': position[1] };
       console.log('position', currentPosition);
       this.mapPolygons.forEach(polygon => {
-        console.log('Inside '+ polygon.placeName,isPointInPolygon(currentPosition,polygon.polygonCoords));
+        console.log('Inside ' + polygon.placeName, isPointInPolygon(currentPosition, polygon.polygonCoords));
         //let index = this.positionOcupiedPolygons.indexOf(polygon.placeName);
         if (isPointInPolygon(currentPosition, polygon.polygonCoords)) {
-         // this.positionOcupiedPolygons.push(name);
-          if(polygon.entered != true) {
+          // this.positionOcupiedPolygons.push(name);
+          if (polygon.entered != true) {
             this.notificationService.openSnackBar("Entered inside " + polygon.placeName, 1);
             polygon.entered = true;
             polygon.left = false;
           }
-        } else {         
+        } else {
           if (polygon.entered == true && polygon.left != true) {
             polygon.left = true;
             polygon.entered = false;
@@ -145,7 +166,7 @@ export class MapboxComponent implements OnInit {
         }
       });
     }
-    else{
+    else {
       clearInterval(this.intervalObject);
       this.positionIndex = 0;
     }

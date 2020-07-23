@@ -82,3 +82,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
   width: 100%;
   top:0;
 }
+
+.geocoder-pin-right {
+  display: none !important;
+}
+
+.mapboxgl-ctrl-geocoder input {
+  height: 35px;
+  width: 240px;
+  border-radius: 5px;
+}
+
+.run-icon{  
+  color: black;
+  transform: rotateY(180deg);
+ }
+
+ .custom-icon {
+  margin: 5px 10px;
+ }

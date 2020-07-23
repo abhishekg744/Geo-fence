@@ -4,6 +4,14 @@
             (loadGeoFenceOnMap)="loadGeoFenceOnMap($event)" (triggerDrawing)="triggerDrawing($event)"
             (addGeoFence)="closeDialog($event)"></app-geofence-management>
     </div>
+    <!-- <mat-form-field class="example-full-width">
+        <input placeholder="Search Place" matInput id="map-input" [matAutocomplete]="auto">
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+          <mat-option *ngFor="let option of searchOptions" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field> -->
     <ngui-map zoom="19" [center]="mapCenter" mapTypeId="satellite" (mapReady$)="onMapReady($event)">
         <polygon *ngFor="let polygon of coords" [editable]="true" [paths]="polygon.polygonCoords"
             [strokeColor]="'#FFC107'" [strokeOpacity]="0.8" [strokeWeight]="2" [fillColor]="'#FFC107'"
@@ -22,9 +30,4 @@
 <div class="progress-loader" *ngIf="loading">
     <mat-progress-spinner [mode]="'indeterminate'">
     </mat-progress-spinner>
-</div>
-<div class="run-icon">
-    <span class="material-icons" (click)="listenToLocation()">
-        directions_run
-        </span>
 </div>

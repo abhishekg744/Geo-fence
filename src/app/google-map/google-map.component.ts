@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, NgZone } from '@angular/core';
 import { isPointInPolygon } from 'geolib';
 import { DrawingManager } from '@ngui/map';
 import { MapConfig } from './google-map-config';
@@ -8,6 +8,7 @@ import { LoaderService } from '../services/loader.service';
 import { MapService } from '../services/map.service';
 import { positions } from 'src/assets/data/position_data';
 import { CONSTANTS } from '../contants';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-google-map',
@@ -16,15 +17,14 @@ import { CONSTANTS } from '../contants';
 })
 export class GoogleMapComponent implements OnInit {
 
-  constructor(public dialog: MatDialog, private mapService: MapService,
-    private notificationService: NotificationService, private loaderService: LoaderService) { }
+  constructor(public dialog: MatDialog, private mapService: MapService,private ref: ChangeDetectorRef,
+    private notificationService: NotificationService, private loaderService: LoaderService, private zone: NgZone) { }
 
   selectedOverlay: any;
   @ViewChild(DrawingManager) drawingManager: DrawingManager;
   // if backend is not running, this is needed to enable dummy data,
   // once backend is in place this will anyhow gets replaced
   GeoFenceNames = ['fence1', 'fence2'];
-  
   mapCenter ;
   drawOptions = {
     position: 2,
@@ -44,28 +44,72 @@ export class GoogleMapComponent implements OnInit {
   positionOcupiedPolygons = [];
   intervalObject  ;
 
+  autocomplete: any;
+  address: any = {};
+  center: any;
+  //mapInput = new FormControl();
+  searchOptions = [];
+
   ngOnInit(): void {
-  let currentLocation = this.mapService.getCurrentLocation().then((data : any) =>{
-    this.mapCenter = data.latitude.toString()+','+ data.longitude.toString();
-    console.log("CurrentLocation",data)
-  });
     sessionStorage.component = CONSTANTS.GOOGLEMAP_COMPONENT;
+    let currentLocation = this.mapService.getCurrentLocation().then((data: any) => {
+     // this.mapCenter = data.latitude.toString() + ',' + data.longitude.toString();
+     this.mapCenter = MapConfig.Map_Center;
+      console.log("CurrentLocation", data)
+    });
+    
     // listen to loader to enable/disable
     this.loaderService.loaderState.subscribe((res: any) => {
-      this.loading=res;
+      this.loading = res;
     });
 
     this.mapService.getAllGeoFenceNames().subscribe((res: any) => {
       this.GeoFenceNames = res;
     }, err => {
       console.log("Error Response", err);
-    }); 
+    });
 
     // if backend is not running, this is needed to enable dummy data,
     // once backend is in place this will anyhow gets replaced
     this.mapService.setCurrentGeofenceList(
-      [{ 'name': '1', 'placeName':'sasken', 'coords': "12.954612386058743,77.638535;12.954421568269561,77.63922432771683;12.953770695532927,77.63901511541367;12.953922304595407,77.63839552513123;" }]
+      [{ 'name': '1', 'placeName': 'sasken', 'coords': "12.954612386058743,77.638535;12.954421568269561,77.63922432771683;12.953770695532927,77.63901511541367;12.953922304595407,77.63839552513123;" }]
     );
+  }
+
+  onMapReady(map) {
+    this.map = map;
+    console.log('map', map);
+    this.initializeDrawingManager();
+    //this.initializeMapSearch();
+    this.addCustomRunIcon();
+  }
+
+  addCustomRunIcon() {
+    var span = document.createElement('button');
+    span.classList.add('material-icons', 'run-icon', 'custom-icon');
+    span.textContent = 'directions_run'
+    span.addEventListener('click', async () => {
+      this.zone.run(() => {
+        this.listenToLocation();
+    });
+    });
+    this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(span);
+  }
+
+  initializeMapSearch() {
+    var input = (document.getElementById('map-input') as HTMLInputElement);
+    var autocomplete = new google.maps.places.Autocomplete(input);
+
+        // Bind the map's bounds (viewport) property to the autocomplete object,
+        // so that the autocomplete requests use the current map bounds for the
+        // bounds option in the request.
+        autocomplete.bindTo('bounds', this.map);
+        autocomplete.setFields(
+          ['address_components', 'geometry', 'icon', 'name']);
+          autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+            console.log(place);
+          });
   }
 
   // delete polygon on map
@@ -76,14 +120,17 @@ export class GoogleMapComponent implements OnInit {
     }
   }
 
-  triggerDrawing(isDrawEnabled) {
-    this.enableDrawing = isDrawEnabled;    
+  placeChanged(place) {
+    this.center = place.geometry.location;
+    for (let i = 0; i < place.address_components.length; i++) {
+      let addressType = place.address_components[i].types[0];
+      this.address[addressType] = place.address_components[i].long_name;
+    }
+    this.ref.detectChanges();
   }
 
-  onMapReady(map) {
-    this.map = map;
-    console.log('map', map);
-    this.initializeDrawingManager();
+  triggerDrawing(isDrawEnabled) {
+    this.enableDrawing = isDrawEnabled;    
   }
 
   initializeDrawingManager() {

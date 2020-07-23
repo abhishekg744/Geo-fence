@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
-
+import MapboxGeocoder from 'mapbox-gl-geocoder';
+require('../../../node_modules/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css');
 import { environment } from 'src/environments/environment';
 import { MapConfig } from '../mapbox/mapbox-config';
 import { BehaviorSubject } from 'rxjs';
@@ -49,6 +50,17 @@ export class MapBoxService {
     this.map.on('draw.create', (event) => this.updateArea(event));
     // this.map.on('draw.delete', this.updateArea);
     // this.map.on('draw.update', this.updateArea);
+  }
+
+  addGeoCoder() {
+    this.map.addControl(
+      new MapboxGeocoder({
+      accessToken: environment.mapToken,
+      mapboxgl: mapboxgl
+      })
+      );
+      // var geocoder = new MapboxGeocoder({ accessToken: environment.mapToken });
+      // document.getElementById('map-input').appendChild(geocoder.onAdd());
   }
 
   updateArea(event) {

@@ -13,6 +13,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import { MatListModule } from '@angular/material/list';
         MatInputModule,
         MatToolbarModule,
         MatIconModule,
-        MatCardModule
+        MatCardModule,
+        MatAutocompleteModule,
     ],
     exports: [
         MatExpansionModule,
@@ -45,7 +47,8 @@ import { MatListModule } from '@angular/material/list';
         MatInputModule,
         MatToolbarModule,
         MatIconModule,
-        MatCardModule
+        MatCardModule,
+        MatAutocompleteModule,
     ]
 })
 export class MaterialModule { }
