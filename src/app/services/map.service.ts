@@ -14,7 +14,7 @@ export class MapService {
 
   public currentGeofencePolygonList = new BehaviorSubject([]);
   private currentGeofence = '';
-  coordsPattern =  /^[0-9.,;]+$/; 
+  coordsPattern =  /^[0-9.,-;]+$/; 
   component='';  
 
   setComponent(component){
