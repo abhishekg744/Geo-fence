@@ -15,6 +15,11 @@ export class MapService {
   public currentGeofencePolygonList = new BehaviorSubject([]);
   private currentGeofence = '';
   coordsPattern =  /^[0-9.,;]+$/; 
+  component='';  
+
+  setComponent(component){
+    this.component=component;
+  }
 
   getCurrentLocation() {
     return new Promise(resolve => {
@@ -61,11 +66,11 @@ export class MapService {
   }
 
   getGeofenceByName(name){
-      return this.http.get<any>(URL.getGeofenceByName + name);
+      return this.http.get<any>(URL.getGeofenceByName.replace('component',this.component) + name);
   }
 
   getAllGeoFenceNames(){
-    return this.http.get(URL.getAllGeoFenceNames);
+    return this.http.get(URL.getAllGeoFenceNames.replace('component',this.component));
   }
 
   

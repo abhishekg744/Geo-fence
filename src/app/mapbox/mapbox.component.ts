@@ -27,7 +27,7 @@ export class MapboxComponent implements OnInit {
   intervalObject;
   isMarkerAdded = false;
   async ngOnInit() {
-    sessionStorage.component = CONSTANTS.MAPBOX_COMPONENT;
+     this.mapService.setComponent(CONSTANTS.MAPBOX_COMPONENT);
     this.mapService.currentGeofencePolygonList.subscribe(data => {
       this.polygons = data;
     });

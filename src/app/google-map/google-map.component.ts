@@ -51,7 +51,7 @@ export class GoogleMapComponent implements OnInit {
   searchOptions = [];
 
   ngOnInit(): void {
-    sessionStorage.component = CONSTANTS.GOOGLEMAP_COMPONENT;
+    this.mapService.setComponent(CONSTANTS.GOOGLEMAP_COMPONENT);
     let currentLocation = this.mapService.getCurrentLocation().then((data: any) => {
      // this.mapCenter = data.latitude.toString() + ',' + data.longitude.toString();
      this.mapCenter = MapConfig.Map_Center;

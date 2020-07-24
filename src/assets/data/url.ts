@@ -1,7 +1,7 @@
 import { environment } from 'src/environments/environment';
 
 let base = environment.serverUrl;
-let componentIdentifier = sessionStorage.component;
+let componentIdentifier='component';
 
 export let URL =  {
     getGeofenceByName : base + 'maptype/'+componentIdentifier+'/name/',
