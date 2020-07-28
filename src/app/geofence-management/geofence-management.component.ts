@@ -29,7 +29,7 @@ export class GeofenceManagement implements OnInit {
   isGoogleMap = false;
 
   ngOnInit(): void {
-    this.isGoogleMap = (sessionStorage.component == CONSTANTS.GOOGLEMAP_COMPONENT) ? true : false;
+    this.isGoogleMap = (this.mapService.component == CONSTANTS.GOOGLEMAP_COMPONENT) ? true : false;
     this.mapService.currentGeofencePolygonList.subscribe(data => {
       this.polygons = data;
     });
@@ -70,7 +70,6 @@ export class GeofenceManagement implements OnInit {
         this.polygons = res;
         this.mapService.setCurrentGeofenceList(this.polygons);
       });
-       
     }
     this.mapService.setCurrentGeofence(this.selectedFence);
   }
@@ -80,7 +79,6 @@ export class GeofenceManagement implements OnInit {
     polygonData.name = tableindex;
     this.loadGeoFenceOnMap.emit(polygonData);
   }
-
 
   addNewFence() {
     this.inputError= this.mapService.isLatLngValid(this.newRecord.coords);

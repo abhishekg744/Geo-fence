@@ -75,7 +75,7 @@ export class MapService {
 
   
   addGeofenceData(geofenceData) {
-    geofenceData.mapType = sessionStorage.component;
+    geofenceData.mapType = this.component;
     return this.http.post(URL.addGeofenceData, geofenceData);
   }
 

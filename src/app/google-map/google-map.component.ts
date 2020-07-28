@@ -36,7 +36,7 @@ export class GoogleMapComponent implements OnInit {
   positions = positions;
   positionIndex = 0;
   position: any ;
-  private map: google.maps.Map;
+  map: google.maps.Map;
   dialogData:any;
   showDialog = false;
   enableDrawing = false;
@@ -175,7 +175,7 @@ export class GoogleMapComponent implements OnInit {
     if (this.positionIndex <= this.positions.length - 1) {
       var pos = this.positions[this.positionIndex];
       this.position = { 'lat': pos[0], 'lng': pos[1] };
-      console.log('position', this.position);
+      console.log('position- positionIndex', this.position, this.positionIndex);
       this.coords.forEach(polygon => {
         console.log('Inside '+ polygon.placeName,isPointInPolygon(this.position,polygon.polygonCoords));
         //let index = this.positionOcupiedPolygons.indexOf(polygon.placeName);
