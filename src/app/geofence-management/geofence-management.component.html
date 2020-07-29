@@ -24,7 +24,7 @@
                     <div *ngFor="let polygon of polygons; let tableindex = index;">
                         <div fxLayout="column">
                             <div fxLayout="row">
-                                <strong>Latitude Longitude Values</strong>
+                                <strong>{{ isGoogleMap ? 'Latitude Longitude Values' : 'Longitude Latitude Values' }}</strong>
                                 <span class="material-icons edit-icon" fxFlexAlign="center" *ngIf="!polygon.edit"
                                     (click)="polygon.edit = !polygon.edit">
                                     create
@@ -87,7 +87,7 @@
                     <mat-form-field appearance="fill" *ngIf="showAddInput" class="select-field">
                         <input matInput placeholder="Add new fence" [(ngModel)]="newRecord.name">
                     </mat-form-field>
-                    <strong>Latitude Longitude Values</strong>
+                    <strong>{{ isGoogleMap ? 'Latitude Longitude Values' : 'Longitude Latitude Values' }}</strong>
                     <span class='coord-values'>
                         <mat-form-field appearance="fill" fxFlexFill>
                             <textarea matInput fxFlexAlign="center" (change)="isLatLngValid(newRecord.coords)" [(ngModel)]="newRecord.coords"></textarea>

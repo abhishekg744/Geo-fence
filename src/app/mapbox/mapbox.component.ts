@@ -6,6 +6,7 @@ import { MapConfig } from './mapbox-config';
 import { MapService } from '../services/map.service';
 import { positions } from 'src/assets/data/position_data';
 import { CONSTANTS } from '../contants';
+import { LoaderService } from '../services/loader.service';
 
 @Component({
   selector: 'app-mapbox',
@@ -15,7 +16,7 @@ import { CONSTANTS } from '../contants';
 export class MapboxComponent implements OnInit {
 
   constructor(private mapBoxService: MapBoxService, private mapService: MapService,
-    private notificationService: NotificationService) { }
+    private notificationService: NotificationService,private loaderService: LoaderService) { }
   GeoFenceNames = ['fence1', 'fence2'];
   map
   polygons;
@@ -26,12 +27,18 @@ export class MapboxComponent implements OnInit {
   positionIndex = 0;
   intervalObject;
   isMarkerAdded = false;
+  loading = false;
+  
   async ngOnInit() {
      this.mapService.setComponent(CONSTANTS.MAPBOX_COMPONENT);
     this.mapService.currentGeofencePolygonList.subscribe(data => {
       this.polygons = data;
     });
 
+     // listen to loader to enable/disable
+     this.loaderService.loaderState.subscribe((res: any) => {
+      this.loading = res;
+    });
 
     this.mapBoxService.newCoorinates.subscribe(data => {
       this.confirmCoordinates(data);

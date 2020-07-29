@@ -9,3 +9,7 @@
     <app-add-geofence fxFlex="50" fxFlexAlign="center" [data]="dialogData" (closeDialog)="closeDialog($event)">
     </app-add-geofence>
 </div>
+<div class="progress-loader" *ngIf="loading">
+    <mat-progress-spinner [mode]="'indeterminate'">
+    </mat-progress-spinner>
+</div>
